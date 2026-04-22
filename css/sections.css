@@ -1,0 +1,27 @@
+﻿/* ===== SEÃ‡Ã•ES COLAPSÃVEIS ===== */
+#dashboard-content,
+#novo-content,
+#historico-content,
+#biblioteca-content,
+#favoritos-content,
+#metas-content,
+#perfil-content {
+  max-height: none;
+  overflow: visible;
+  transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  opacity: 1;
+}
+
+#dashboard-content.collapsed,
+#novo-content.collapsed,
+#historico-content.collapsed,
+#biblioteca-content.collapsed,
+#favoritos-content.collapsed,
+#metas-content.collapsed,
+#perfil-content.collapsed {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+

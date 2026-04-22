@@ -1,0 +1,60 @@
+﻿/* ===== DASHBOARD ===== */
+.dashboard-range-switch {
+  display: inline-flex;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--bg-surface-soft);
+}
+
+.dashboard-range-btn {
+  border: 0;
+  background: transparent;
+  color: var(--text-secondary);
+  padding: 7px 12px;
+  font-size: 0.82rem;
+}
+
+.dashboard-range-btn.active {
+  background: var(--brand-soft);
+  color: var(--brand-accent);
+  font-weight: 700;
+}
+
+.dashboard-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.dashboard-kpi-card {
+  background: var(--bg-surface-soft);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 12px;
+}
+
+.dashboard-kpi-card p {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--text-muted-theme);
+}
+
+.dashboard-kpi-card strong {
+  color: var(--text-primary);
+  font-size: 1.15rem;
+}
+
+.dashboard-chart-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 12px;
+}
+
+.dashboard-chart-card {
+  background: var(--bg-surface-soft);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 14px;
+}
+

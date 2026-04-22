@@ -1,0 +1,758 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ExerciseHub | Treino, progresso e bem-estar</title>
+  <meta name="description" content="Organize seus treinos, acompanhe sua evolução e centralize metas, histórico e biblioteca de exercícios em um só lugar.">
+  <meta name="theme-color" content="#0b815c">
+  <link rel="icon" type="image/svg+xml" href="assets/exercisehub-favicon.svg">
+  
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- LANDING -->
+  <div id="home" class="landing">
+    <div class="landing-shell">
+      <div class="landing-badge">
+        <span class="brand-mark brand-mark-lg"><i class="fa-solid fa-dumbbell"></i></span>
+        <span>ExerciseHub</span>
+        <small>Seu painel pessoal de treino</small>
+      </div>
+      <h1 class="display-3 fw-bold">Sua rotina fitness,<br>com clareza de produto.</h1>
+      <p class="lead text-light mt-4 mb-4">Registre exercícios, acompanhe indicadores, organize metas e mantenha seu progresso em uma experiência mais limpa e consistente.</p>
+      <div class="landing-actions d-flex justify-content-center gap-4">
+        <button class="btn btn-outline-light btn-lg px-5 py-3" onclick="showOverlay('login')">Entrar</button>
+        <button class="btn btn-emerald btn-lg px-5 py-3" onclick="showOverlay('register')">Cadastrar gratuitamente</button>
+      </div>
+      <div class="landing-metrics" aria-label="Destaques do ExerciseHub">
+        <div class="landing-metric">
+          <strong>Dashboard</strong>
+          <span>KPIs, minutos e consistência</span>
+        </div>
+        <div class="landing-metric">
+          <strong>Biblioteca</strong>
+          <span>Exercícios, mapa muscular e favoritos</span>
+        </div>
+        <div class="landing-metric">
+          <strong>Histórico</strong>
+          <span>Filtros, edição e exportação em CSV</span>
+        </div>
+      </div>
+      <p class="landing-note mb-0">Projeto local com foco em organização de treino e experiência visual mais profissional.</p>
+    </div>
+  </div>
+
+  <!-- OVERLAY LOGIN -->
+  <div id="overlay-login" class="overlay" role="dialog" aria-modal="true" aria-labelledby="loginTitle" aria-hidden="true">
+    <div class="card-auth position-relative" tabindex="-1">
+      <button type="button" class="close-btn" onclick="closeOverlay('login')" aria-label="Fechar login">×</button>
+      <div class="auth-brand">
+        <span class="brand-mark"><i class="fa-solid fa-dumbbell"></i></span>
+        <span>ExerciseHub</span>
+      </div>
+      <h2 id="loginTitle" class="text-center mb-2">Bem-vindo de volta</h2>
+      <p class="auth-subtitle text-center mb-4">Entre para continuar acompanhando sua evolução.</p>
+      <form id="loginForm" class="auth-form" novalidate>
+        <div class="auth-field">
+          <label for="loginEmail" class="auth-label">E-mail</label>
+          <input type="email" id="loginEmail" class="form-control form-control-lg" placeholder="voce@email.com" autocomplete="email" required>
+        </div>
+        <div class="auth-field">
+          <label for="loginPassword" class="auth-label">Senha</label>
+          <div class="auth-input-wrap">
+            <input type="password" id="loginPassword" class="form-control form-control-lg" placeholder="Digite sua senha" autocomplete="current-password" required>
+            <button type="button" class="auth-toggle-password" data-password-toggle="loginPassword" aria-label="Mostrar senha">
+              <i class="fa-regular fa-eye"></i>
+            </button>
+          </div>
+        </div>
+        <div class="auth-actions-row">
+          <button type="button" class="auth-inline-link" onclick="showOverlay('forgot')">Esqueci minha senha</button>
+        </div>
+        <p id="loginFeedback" class="auth-feedback d-none" aria-live="polite"></p>
+        <button id="loginSubmitBtn" type="submit" class="btn btn-emerald btn-lg w-100 auth-submit">Entrar</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- OVERLAY RECUPERAR SENHA -->
+  <div id="overlay-forgot" class="overlay" role="dialog" aria-modal="true" aria-labelledby="forgotTitle" aria-hidden="true">
+    <div class="card-auth position-relative" tabindex="-1">
+      <button type="button" class="close-btn" onclick="closeOverlay('forgot')" aria-label="Fechar recuperação de senha">×</button>
+      <div class="auth-brand">
+        <span class="brand-mark"><i class="fa-solid fa-dumbbell"></i></span>
+        <span>ExerciseHub</span>
+      </div>
+      <h2 id="forgotTitle" class="text-center mb-2">Redefinir senha</h2>
+      <p class="auth-subtitle text-center mb-4">A troca acontece localmente neste navegador.</p>
+      <form id="forgotForm" class="auth-form" novalidate>
+        <div class="auth-field">
+          <label for="forgotEmail" class="auth-label">E-mail cadastrado</label>
+          <input type="email" id="forgotEmail" class="form-control form-control-lg" placeholder="voce@email.com" autocomplete="email" required>
+        </div>
+        <div class="auth-field">
+          <label for="forgotPassword" class="auth-label">Nova senha</label>
+          <div class="auth-input-wrap">
+            <input type="password" id="forgotPassword" class="form-control form-control-lg" placeholder="Mínimo de 6 caracteres" autocomplete="new-password" required>
+            <button type="button" class="auth-toggle-password" data-password-toggle="forgotPassword" aria-label="Mostrar senha">
+              <i class="fa-regular fa-eye"></i>
+            </button>
+          </div>
+        </div>
+        <div class="auth-field">
+          <label for="forgotPasswordConfirm" class="auth-label">Confirmar nova senha</label>
+          <div class="auth-input-wrap">
+            <input type="password" id="forgotPasswordConfirm" class="form-control form-control-lg" placeholder="Repita a nova senha" autocomplete="new-password" required>
+            <button type="button" class="auth-toggle-password" data-password-toggle="forgotPasswordConfirm" aria-label="Mostrar senha">
+              <i class="fa-regular fa-eye"></i>
+            </button>
+          </div>
+        </div>
+        <p id="forgotFeedback" class="auth-feedback d-none" aria-live="polite"></p>
+        <button id="forgotSubmitBtn" type="submit" class="btn btn-emerald btn-lg w-100 auth-submit">Atualizar senha</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- OVERLAY CADASTRO -->
+  <div id="overlay-register" class="overlay" role="dialog" aria-modal="true" aria-labelledby="registerTitle" aria-hidden="true">
+    <div class="card-auth position-relative" tabindex="-1">
+      <button type="button" class="close-btn" onclick="closeOverlay('register')" aria-label="Fechar cadastro">×</button>
+      <div class="auth-brand">
+        <span class="brand-mark"><i class="fa-solid fa-dumbbell"></i></span>
+        <span>ExerciseHub</span>
+      </div>
+      <h2 id="registerTitle" class="text-center mb-2">Criar conta</h2>
+      <p class="auth-subtitle text-center mb-4">Comece seu acompanhamento com uma conta local em segundos.</p>
+      <form id="registerForm" class="auth-form" novalidate>
+        <div class="auth-field">
+          <label for="registerName" class="auth-label">Nome completo</label>
+          <input type="text" id="registerName" class="form-control form-control-lg" placeholder="Seu nome completo" autocomplete="name" required>
+        </div>
+        <div class="auth-field">
+          <label for="registerEmail" class="auth-label">E-mail</label>
+          <input type="email" id="registerEmail" class="form-control form-control-lg" placeholder="voce@email.com" autocomplete="email" required>
+        </div>
+        <div class="auth-field">
+          <label for="registerPassword" class="auth-label">Senha</label>
+          <div class="auth-input-wrap">
+            <input type="password" id="registerPassword" class="form-control form-control-lg" placeholder="Mínimo de 6 caracteres" autocomplete="new-password" required>
+            <button type="button" class="auth-toggle-password" data-password-toggle="registerPassword" aria-label="Mostrar senha">
+              <i class="fa-regular fa-eye"></i>
+            </button>
+          </div>
+          <small class="auth-helper">Esta conta fica salva apenas neste navegador.</small>
+        </div>
+        <p id="registerFeedback" class="auth-feedback d-none" aria-live="polite"></p>
+        <button id="registerSubmitBtn" type="submit" class="btn btn-emerald btn-lg w-100 auth-submit">Criar conta gratuita</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL DE DETALHES DO EXERCÍCIO -->
+  <div id="exerciseModal" class="overlay" role="dialog" aria-modal="true" aria-labelledby="exerciseModalTitle" aria-hidden="true" style="display:none;">
+    <div class="card-auth position-relative" style="max-width:600px;max-height:90vh;overflow-y:auto;" tabindex="-1">
+      <button type="button" class="close-btn" onclick="fecharModalExercicio()" aria-label="Fechar detalhes do exercício">×</button>
+      <div id="modalExerciseContent"></div>
+    </div>
+  </div>
+
+  <!-- MODAL DE EDIÇÃO DO HISTÓRICO -->
+  <div id="editExerciseModal" class="overlay" role="dialog" aria-modal="true" aria-labelledby="editExerciseTitle" aria-hidden="true" style="display:none;">
+    <div class="card-auth position-relative" style="max-width:620px;" tabindex="-1">
+      <button type="button" class="close-btn" onclick="fecharModalEdicao()" aria-label="Fechar edição">×</button>
+      <h2 id="editExerciseTitle" class="mb-4">Editar Registro</h2>
+      <input type="hidden" id="editExerciseIndex">
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label for="editDate" class="form-label">Data</label>
+          <input type="date" id="editDate" class="form-control">
+        </div>
+        <div class="col-md-6">
+          <label for="editType" class="form-label">Atividade</label>
+          <select id="editType" class="form-select">
+            <option>Musculação</option>
+            <option>Corrida</option>
+            <option>Natação</option>
+            <option>Ioga</option>
+            <option>Crossfit</option>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label for="editEquip" class="form-label">Equipamento</label>
+          <select id="editEquip" class="form-select">
+            <option value="">Nenhum</option>
+            <option>Corpo Livre</option>
+            <option>Halteres</option>
+            <option>Máquina</option>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label for="editDuration" class="form-label">Duração (min)</label>
+          <input type="number" id="editDuration" class="form-control" min="5" max="480" step="5">
+        </div>
+        <div class="col-md-6">
+          <label for="editIntensity" class="form-label">Intensidade</label>
+          <select id="editIntensity" class="form-select">
+            <option>Baixa</option>
+            <option>Média</option>
+            <option>Alta</option>
+          </select>
+        </div>
+      </div>
+      <button onclick="salvarEdicaoExercicio()" class="btn btn-emerald w-100 mt-4">Salvar alterações</button>
+    </div>
+  </div>
+
+  <!-- ÁREA INTERNA -->
+  <div id="app" class="d-none">
+    <div class="sidebar" id="sidebar">
+      <div class="px-4 py-4">
+        <div class="brand-lockup">
+          <span class="brand-mark"><i class="fa-solid fa-dumbbell"></i></span>
+          <div>
+            <h4 class="fw-bold text-success mb-0">ExerciseHub</h4>
+            <small class="text-muted">Painel de treino pessoal</small>
+          </div>
+        </div>
+      </div>
+      <div class="nav flex-column px-3">
+        <a href="#" onclick="event.preventDefault(); showAppPage('dashboard')" class="nav-link active" data-page="dashboard">Dashboard</a>
+        <a href="#" onclick="event.preventDefault(); showAppPage('mapa')" class="nav-link" data-page="mapa">Mapa Muscular</a>
+        <a href="#" onclick="event.preventDefault(); showAppPage('novo')" class="nav-link" data-page="novo">Novo Registro</a>
+        <a href="#" onclick="event.preventDefault(); showAppPage('historico')" class="nav-link" data-page="historico">Histórico</a>
+        <a href="#" onclick="event.preventDefault(); showAppPage('biblioteca')" class="nav-link" data-page="biblioteca">Biblioteca</a>
+        <a href="#" onclick="event.preventDefault(); showAppPage('favoritos')" class="nav-link" data-page="favoritos">Favoritos</a>
+        <a href="#" onclick="event.preventDefault(); showAppPage('metas')" class="nav-link" data-page="metas">Metas</a>
+        <a href="#" onclick="event.preventDefault(); showAppPage('perfil')" class="nav-link" data-page="perfil">Perfil</a>
+      </div>
+      <button id="themeToggleBtn" onclick="toggleTheme()" class="btn theme-toggle-btn mx-3 mt-3 w-75" aria-label="Alternar tema">
+        <i id="themeToggleIcon" class="fa-regular fa-sun me-2"></i>
+        <span id="themeToggleText">Modo Claro</span>
+      </button>
+      <button onclick="logout()" class="btn btn-outline-danger mx-3 mt-5 w-75">Sair</button>
+    </div>
+
+    <button class="toggle-btn btn btn-emerald" onclick="toggleSidebar()" id="toggleBtn" aria-label="Alternar menu lateral"><i class="fas fa-bars"></i></button>
+
+    <div class="main-content">
+
+      <!-- DASHBOARD -->
+      <div id="app-dashboard" class="app-content active">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+          <div>
+            <h1 class="display-6 fw-bold mb-0">Olá, <span id="userName">Luiz Felipe</span></h1>
+            <p id="dashboardSubtitle" class="text-muted mb-0">Visão geral do seu desempenho.</p>
+          </div>
+          <div class="dashboard-range-switch" role="group" aria-label="Período do dashboard">
+            <button class="dashboard-range-btn active" data-dashboard-range="7d" onclick="setDashboardRange('7d')">7 dias</button>
+            <button class="dashboard-range-btn" data-dashboard-range="30d" onclick="setDashboardRange('30d')">30 dias</button>
+            <button class="dashboard-range-btn" data-dashboard-range="all" onclick="setDashboardRange('all')">Tudo</button>
+          </div>
+          <button class="btn btn-sm btn-outline-secondary" onclick="toggleSection('dashboard-content')"><i class="fas fa-chevron-down"></i></button>
+        </div>
+        <div id="dashboard-content">
+          <div class="dashboard-kpi-grid mb-4">
+            <div class="dashboard-kpi-card">
+              <p>Minutos totais</p>
+              <strong id="dashTotalMinutes">0</strong>
+            </div>
+            <div class="dashboard-kpi-card">
+              <p>Treinos</p>
+              <strong id="dashSessionCount">0</strong>
+            </div>
+            <div class="dashboard-kpi-card">
+              <p>Média por treino</p>
+              <strong id="dashAvgDuration">0 min</strong>
+            </div>
+            <div class="dashboard-kpi-card">
+              <p>Melhor dia</p>
+              <strong id="dashBestDay">--</strong>
+            </div>
+            <div class="dashboard-kpi-card">
+              <p>Sequência atual</p>
+              <strong id="dashStreak">0 dia(s)</strong>
+            </div>
+          </div>
+
+          <div class="dashboard-chart-grid">
+            <div class="dashboard-chart-card">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <h5 class="mb-0">Evolução de Minutos</h5>
+              </div>
+              <canvas id="weeklyChart" height="300"></canvas>
+            </div>
+            <div class="dashboard-chart-card">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <h5 class="mb-0">Distribuição por Atividade</h5>
+              </div>
+              <div id="dashboardActivityEmpty" class="text-muted small mb-2 d-none">Sem atividades no período para gerar o gráfico.</div>
+              <canvas id="activityChart" height="300"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MAPA MUSCULAR -->
+      <div id="app-mapa" class="app-content">
+        <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-3">
+          <div>
+            <h1 class="display-6 fw-bold mb-2">Mapa Muscular Interativo</h1>
+            <p class="text-success mb-0">Escolha uma região para ver exercícios recomendados e detalhes de treino.</p>
+          </div>
+          <div class="muscle-view-switch" role="group" aria-label="Visualização do mapa muscular">
+            <button class="muscle-view-btn active" data-view-btn="both" onclick="setMuscleView('both')">Ambos</button>
+            <button class="muscle-view-btn" data-view-btn="front" onclick="setMuscleView('front')">Frente</button>
+            <button class="muscle-view-btn" data-view-btn="back" onclick="setMuscleView('back')">Costas</button>
+          </div>
+        </div>
+
+        <div class="muscle-chip-row mb-3">
+          <button class="muscle-chip active" data-muscle-chip="" onclick="clearMuscleSelection()">Todos</button>
+          <button class="muscle-chip" data-muscle-chip="Peito" onclick="filterByMuscle('Peito')">Peito</button>
+          <button class="muscle-chip" data-muscle-chip="Costas" onclick="filterByMuscle('Costas')">Costas</button>
+          <button class="muscle-chip" data-muscle-chip="Ombros" onclick="filterByMuscle('Ombros')">Ombros</button>
+          <button class="muscle-chip" data-muscle-chip="Braços" onclick="filterByMuscle('Braços')">Braços</button>
+          <button class="muscle-chip" data-muscle-chip="Abdômen" onclick="filterByMuscle('Abdômen')">Abdômen</button>
+          <button class="muscle-chip" data-muscle-chip="Glúteos" onclick="filterByMuscle('Glúteos')">Glúteos</button>
+          <button class="muscle-chip" data-muscle-chip="Pernas" onclick="filterByMuscle('Pernas')">Pernas</button>
+          <button class="muscle-chip" data-muscle-chip="Pescoço" onclick="filterByMuscle('Pescoço')">Pescoço</button>
+        </div>
+
+        <div class="muscle-map-layout">
+          <div class="muscle-panel" data-view-panel="front">
+            <h5 class="text-center mb-3 text-light">Frente</h5>
+            <div class="muscle-map-frame">
+              <svg id="muscleMapFront" class="muscle-map" viewBox="0 0 200 400" xmlns="http://www.w3.org/2000/svg">
+                <path class="muscle-body-bg" d="M100 8 C83 8 69 20 66 37 L62 92 C58 126 58 160 62 194 L66 250 C69 296 77 334 88 348 C92 353 94 360 94 372 L94 394 L106 394 L106 372 C106 360 108 353 112 348 C123 334 131 296 134 250 L138 194 C142 160 142 126 138 92 L134 37 C131 20 117 8 100 8 Z"/>
+                <path class="muscle-zone" data-muscle="Pescoço" d="M100 20 C114 20 126 32 126 46 C126 60 114 72 100 72 C86 72 74 60 74 46 C74 32 86 20 100 20 Z"/>
+                <path class="muscle-zone" data-muscle="Peito" d="M70 84 C80 70 120 70 130 84 C135 98 133 127 125 139 C116 148 84 148 75 139 C67 127 65 98 70 84 Z"/>
+                <path class="muscle-zone" data-muscle="Abdômen" d="M78 150 C88 144 112 144 122 150 L122 188 C112 196 88 196 78 188 Z"/>
+                <path class="muscle-zone" data-muscle="Braços" d="M42 84 C35 98 35 150 42 164 C49 173 57 173 64 164 C70 149 69 98 62 84 Z"/>
+                <path class="muscle-zone" data-muscle="Braços" d="M158 84 C165 98 165 150 158 164 C151 173 143 173 136 164 C130 149 131 98 138 84 Z"/>
+                <path class="muscle-zone" data-muscle="Ombros" d="M52 66 C43 68 36 77 36 88 C36 99 44 107 54 107 C63 107 71 99 71 88 C71 77 61 68 52 66 Z"/>
+                <path class="muscle-zone" data-muscle="Ombros" d="M148 66 C157 68 164 77 164 88 C164 99 156 107 146 107 C137 107 129 99 129 88 C129 77 139 68 148 66 Z"/>
+                <path class="muscle-zone" data-muscle="Pernas" d="M70 194 C62 208 61 252 67 278 C71 289 84 289 90 278 C96 251 95 207 86 194 Z"/>
+                <path class="muscle-zone" data-muscle="Pernas" d="M130 194 C138 208 139 252 133 278 C129 289 116 289 110 278 C104 251 105 207 114 194 Z"/>
+                <path class="muscle-zone" data-muscle="Pernas" d="M70 278 C62 292 61 336 67 352 C72 361 84 361 90 352 C96 335 95 292 86 278 Z"/>
+                <path class="muscle-zone" data-muscle="Pernas" d="M130 278 C138 292 139 336 133 352 C128 361 116 361 110 352 C104 335 105 292 114 278 Z"/>
+              </svg>
+            </div>
+          </div>
+
+          <div class="muscle-panel" data-view-panel="back">
+            <h5 class="text-center mb-3 text-light">Costas</h5>
+            <div class="muscle-map-frame">
+              <svg id="muscleMapBack" class="muscle-map" viewBox="0 0 200 400" xmlns="http://www.w3.org/2000/svg">
+                <path class="muscle-body-bg" d="M100 8 C83 8 69 20 66 37 L62 92 C58 126 58 160 62 194 L66 250 C69 296 77 334 88 348 C92 353 94 360 94 372 L94 394 L106 394 L106 372 C106 360 108 353 112 348 C123 334 131 296 134 250 L138 194 C142 160 142 126 138 92 L134 37 C131 20 117 8 100 8 Z"/>
+                <path class="muscle-zone" data-muscle="Pescoço" d="M100 20 C114 20 126 32 126 46 C126 60 114 72 100 72 C86 72 74 60 74 46 C74 32 86 20 100 20 Z"/>
+                <path class="muscle-zone" data-muscle="Costas" d="M62 74 C77 58 123 58 138 74 C145 96 143 146 133 170 C119 181 81 181 67 170 C57 146 55 96 62 74 Z"/>
+                <path class="muscle-zone" data-muscle="Braços" d="M36 92 C30 106 30 156 37 172 C43 181 51 181 58 172 C64 156 63 106 56 92 Z"/>
+                <path class="muscle-zone" data-muscle="Braços" d="M164 92 C170 106 170 156 163 172 C157 181 149 181 142 172 C136 156 137 106 144 92 Z"/>
+                <path class="muscle-zone" data-muscle="Ombros" d="M66 56 C54 58 43 71 42 86 C49 93 57 101 66 111 C74 100 79 90 78 78 C76 66 71 58 66 56 Z"/>
+                <path class="muscle-zone" data-muscle="Ombros" d="M134 56 C146 58 157 71 158 86 C151 93 143 101 134 111 C126 100 121 90 122 78 C124 66 129 58 134 56 Z"/>
+                <path class="muscle-zone" data-muscle="Glúteos" d="M76 166 C86 160 114 160 124 166 L124 210 C114 218 86 218 76 210 Z"/>
+                <path class="muscle-zone" data-muscle="Pernas" d="M70 212 C62 226 61 268 67 296 C71 306 84 306 90 296 C96 268 95 226 86 212 Z"/>
+                <path class="muscle-zone" data-muscle="Pernas" d="M130 212 C138 226 139 268 133 296 C129 306 116 306 110 296 C104 268 105 226 114 212 Z"/>
+                <path class="muscle-zone" data-muscle="Pernas" d="M70 296 C62 310 61 348 67 364 C72 372 84 372 90 364 C96 348 95 310 86 296 Z"/>
+                <path class="muscle-zone" data-muscle="Pernas" d="M130 296 C138 310 139 348 133 364 C128 372 116 372 110 364 C104 348 105 310 114 296 Z"/>
+              </svg>
+            </div>
+          </div>
+
+          <aside class="muscle-info-card">
+            <h5 class="mb-2">Região Selecionada</h5>
+            <p class="text-muted mb-2">Músculo ativo:</p>
+            <p class="muscle-selected-name mb-2" id="selectedMuscleName">Nenhum</p>
+            <p class="mb-2"><small class="text-muted">Exercícios relacionados</small></p>
+            <p class="muscle-selected-count mb-3" id="selectedMuscleCount">0</p>
+            <p class="text-muted small mb-3">Dica: clique nos chips acima para navegar mais rápido entre grupos musculares.</p>
+            <button class="btn btn-sm btn-outline-light w-100" onclick="clearMuscleSelection()">Limpar seleção</button>
+          </aside>
+        </div>
+
+        <div id="muscleExercises" class="mt-4">
+          <div class="empty-state">
+            <span class="empty-state-icon"><i class="fa-solid fa-person-rays"></i></span>
+            <h3>Selecione uma região do corpo</h3>
+            <p>Use o mapa ou os chips de grupo muscular para abrir sugestões de exercícios relacionadas a cada área.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- NOVO REGISTRO -->
+      <div id="app-novo" class="app-content">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h2 class="mb-0">Novo Registro</h2>
+          <button class="btn btn-sm btn-outline-secondary" onclick="toggleSection('novo-content')"><i class="fas fa-chevron-down"></i></button>
+        </div>
+        <div id="novo-content">
+          <div class="novo-layout mt-4">
+            <div class="card p-4 novo-form-card">
+              <h5 class="mb-3">Detalhes do Treino</h5>
+              <div class="row g-3">
+                <div class="col-12">
+                  <label>Data</label>
+                  <input type="date" id="exDate" class="form-control form-control-lg">
+                  <div class="d-flex gap-2 mt-2">
+                    <button type="button" class="btn btn-sm btn-outline-light w-100" onclick="setExDatePreset('today')">Hoje</button>
+                    <button type="button" class="btn btn-sm btn-outline-light w-100" onclick="setExDatePreset('yesterday')">Ontem</button>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <label>Tipo de treino</label>
+                  <select id="exType" class="form-select form-control-lg">
+                    <option>Musculação</option><option>Corrida</option><option>Natação</option><option>Ioga</option><option>Crossfit</option>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <label>Duração (min)</label>
+                  <input type="number" id="exDuration" value="60" min="5" max="480" step="5" class="form-control form-control-lg">
+                  <input type="range" id="exDurationRange" class="form-range mt-2" min="5" max="180" step="5" value="60">
+                </div>
+                <div class="col-12">
+                  <label>Intensidade</label>
+                  <select id="exIntensity" class="form-select form-control-lg">
+                    <option>Baixa</option><option>Média</option><option>Alta</option>
+                  </select>
+                </div>
+                <div class="col-12">
+                  <details id="novoRecurringToggle" class="novo-section-toggle">
+                    <summary class="novo-section-summary">
+                      <span>Rotina recorrente</span>
+                      <i class="fa-solid fa-plus"></i>
+                    </summary>
+                    <div class="novo-section-body">
+                      <p class="text-muted small mb-3">Ative para repetir o treino e, em musculação, ver a divisão automática da semana.</p>
+                      <div class="novo-recorrencia-card">
+                        <div class="form-check form-switch mb-2">
+                          <input class="form-check-input" type="checkbox" id="exRecurringEnabled">
+                          <label class="form-check-label fw-semibold" for="exRecurringEnabled">Criar rotina recorrente</label>
+                        </div>
+                        <div id="exRecurringOptions" class="novo-recorrencia-options d-none">
+                          <div class="row g-3">
+                            <div class="col-12">
+                              <label for="exRecurringRange">Período da rotina</label>
+                              <select id="exRecurringRange" class="form-select">
+                                <option value="7">Próximos 7 dias</option>
+                                <option value="30" selected>Próximos 30 dias</option>
+                                <option value="60">Próximos 60 dias</option>
+                                <option value="90">Próximos 90 dias</option>
+                              </select>
+                            </div>
+                            <div class="col-12">
+                              <label>Dias da semana</label>
+                              <div id="exRecurringWeekdays" class="recurrence-weekday-list" aria-label="Dias da semana para recorrência"></div>
+                            </div>
+                          </div>
+                          <div id="exRecurringAutoPlan" class="novo-recorrencia-auto d-none" aria-live="polite"></div>
+                          <div class="novo-recorrencia-summary mt-3">
+                            <span>Registros planejados</span>
+                            <strong id="exRecurringSummary">0 sessões</strong>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </details>
+                </div>
+              </div>
+              <div class="d-flex gap-2 mt-4">
+                <button type="button" onclick="resetNovoRegistroForm()" class="btn btn-outline-light w-100">Limpar</button>
+                <button onclick="adicionarExercicio()" class="btn btn-emerald btn-lg w-100">Salvar Exercício</button>
+              </div>
+            </div>
+
+            <aside class="novo-preview-card">
+              <h5 class="mb-3">Resumo da Sessão</h5>
+              <div class="novo-preview-grid">
+                <div class="novo-preview-item"><span>Data</span><strong id="nrPreviewDate">--</strong></div>
+                <div class="novo-preview-item"><span>Tipo de treino</span><strong id="nrPreviewType">--</strong></div>
+                <div class="novo-preview-item"><span>Duração</span><strong id="nrPreviewDuration">0 min</strong></div>
+                <div class="novo-preview-item"><span>Intensidade</span><strong id="nrPreviewIntensity">--</strong></div>
+                <div class="novo-preview-item"><span>Gasto estimado</span><strong id="nrPreviewCalories">0 kcal</strong></div>
+                <div class="novo-preview-item"><span>Modo</span><strong id="nrPreviewMode">Sessão única</strong></div>
+                <div class="novo-preview-item"><span>Planejamento</span><strong id="nrPreviewPlanCount">1 registro</strong></div>
+              </div>
+              <div class="novo-workload mt-3">
+                <span>Carga da sessão</span>
+                <strong id="nrPreviewWorkload">Leve</strong>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </div>
+
+      <!-- HISTÓRICO -->
+      <div id="app-historico" class="app-content">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h2 class="mb-0">Histórico de Exercícios</h2>
+          <button class="btn btn-sm btn-outline-secondary" onclick="toggleSection('historico-content')"><i class="fas fa-chevron-down"></i></button>
+        </div>
+        <div id="historico-content">
+          <!-- filtros avançados -->
+          <div class="row g-2 align-items-end mt-3">
+            <div class="col-lg-2 col-md-4"><label>De</label><input type="date" id="histFrom" class="form-control"></div>
+            <div class="col-lg-2 col-md-4"><label>Até</label><input type="date" id="histTo" class="form-control"></div>
+            <div class="col-lg-3 col-md-4"><label>Buscar</label><input type="text" id="histSearch" class="form-control" placeholder="Atividade, equipamento ou intensidade"></div>
+            <div class="col-lg-2 col-md-4"><label>Tipo</label><select id="histType" class="form-select">
+                <option value="">Todos</option><option>Musculação</option><option>Corrida</option><option>Natação</option><option>Ioga</option><option>Crossfit</option>
+              </select></div>
+            <div class="col-lg-2 col-md-4"><label>Equipamento</label><select id="histEquip" class="form-select">
+                <option value="">Todos</option><option>Corpo Livre</option><option>Halteres</option><option>Máquina</option>
+              </select></div>
+            <div class="col-lg-2 col-md-4"><label>Intensidade</label><select id="histIntensity" class="form-select">
+                <option value="">Todas</option><option>Baixa</option><option>Média</option><option>Alta</option>
+              </select></div>
+            <div class="col-lg-2 col-md-4"><label>Ordenar</label><select id="histSort" class="form-select">
+                <option value="recent">Mais recente</option><option value="oldest">Mais antigo</option>
+                <option value="longest">Maior duração</option><option value="shortest">Menor duração</option>
+              </select></div>
+            <div class="col-lg-2 col-md-4">
+              <button onclick="clearHistoricoFiltros()" class="btn btn-outline-light w-100">Limpar Filtros</button>
+            </div>
+            <div class="col-lg-2 col-md-4">
+              <button onclick="exportHistoricoCSV()" class="btn btn-emerald w-100">Exportar CSV</button>
+            </div>
+          </div>
+          <div id="histSummaryCards" class="historico-summary-grid mt-3"></div>
+          <div id="histSummary" class="mt-3 text-light"></div>
+          <div id="historicoSelectionBar" class="historico-selection-bar mt-3 d-none">
+            <div class="historico-selection-copy">
+              <strong id="historicoSelectionCount">0 selecionado(s)</strong>
+              <span id="historicoSelectionHint">Selecione os treinos que deseja remover.</span>
+            </div>
+            <div class="historico-selection-actions">
+              <button type="button" id="historicoSelectAllBtn" class="btn btn-sm btn-outline-light" onclick="toggleSelectAllHistoricoVisible()">Selecionar visíveis</button>
+              <button type="button" id="historicoClearSelectionBtn" class="btn btn-sm btn-outline-secondary" onclick="clearHistoricoSelection()">Limpar seleção</button>
+              <button type="button" id="historicoDeleteSelectedBtn" class="btn btn-sm btn-outline-danger" onclick="removerExSelecionados()">Excluir selecionados</button>
+            </div>
+          </div>
+          <div id="historicoList" class="mt-4 historico-list"></div>
+        </div>
+      </div>
+
+      <!-- BIBLIOTECA (NOVA ABA) -->
+      <div id="app-biblioteca" class="app-content">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h2 class="mb-0">Biblioteca de Exercícios</h2>
+          <button class="btn btn-sm btn-outline-secondary" onclick="toggleSection('biblioteca-content')"><i class="fas fa-chevron-down"></i></button>
+        </div>
+        <div id="biblioteca-content">
+          <div class="mt-4">
+            <div class="row g-2 align-items-end mb-3">
+              <div class="col-lg-3"><input type="text" id="searchInput" class="form-control" placeholder="Buscar exercício..."></div>
+              <div class="col-lg-2"><select id="muscleFilter" class="form-select">
+                <option value="">Todos os músculos</option>
+                <option value="Peito">Peito</option>
+                <option value="Costas">Costas</option>
+                <option value="Pernas">Pernas</option>
+                <option value="Ombros">Ombros</option>
+                <option value="Braços">Braços</option>
+                <option value="Tríceps">Tríceps</option>
+                <option value="Abdômen">Abdômen</option>
+              </select></div>
+              <div class="col-lg-2"><select id="equipFilter" class="form-select">
+                <option value="">Todos os equipamentos</option>
+                <option value="Corpo Livre">Corpo Livre</option>
+                <option value="Halteres">Halteres</option>
+                <option value="Barra">Barra</option>
+                <option value="Máquina">Máquina</option>
+              </select></div>
+              <div class="col-lg-2"><select id="difficultyFilter" class="form-select">
+                <option value="">Todas as dificuldades</option>
+                <option value="Fácil">Fácil</option>
+                <option value="Média">Média</option>
+                <option value="Alta">Alta</option>
+              </select></div>
+              <div class="col-lg-2"><select id="sortFilter" class="form-select">
+                <option value="name">Nome (A-Z)</option>
+                <option value="difficulty">Dificuldade</option>
+              </select></div>
+              <div class="col-lg-1"><button onclick="resetBibliotecaFiltros()" class="btn btn-outline-light w-100">Limpar</button></div>
+            </div>
+            <div class="mb-2"><small id="exerciseCount" class="text-muted">Exercícios encontrados: 0</small></div>
+          </div>
+          <div id="bibliotecaList" class="row g-4"></div>
+        </div>
+      </div>
+
+      <!-- FAVORITOS (NOVA ABA) -->
+      <div id="app-favoritos" class="app-content">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h2 class="mb-0">Exercícios Favoritos</h2>
+          <button class="btn btn-sm btn-outline-secondary" onclick="toggleSection('favoritos-content')"><i class="fas fa-chevron-down"></i></button>
+        </div>
+        <div id="favoritos-content">
+          <div id="favoritosList" class="row g-4 mt-4"></div>
+        </div>
+      </div>
+
+      <!-- METAS -->
+      <div id="app-metas" class="app-content">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h2 class="mb-0">Minhas Metas</h2>
+          <button class="btn btn-sm btn-outline-secondary" onclick="toggleSection('metas-content')"><i class="fas fa-chevron-down"></i></button>
+        </div>
+        <div id="metas-content">
+          <div class="metas-layout mt-4">
+            <div class="card p-4 metas-form-card">
+              <h5 class="mb-3">Nova Meta</h5>
+              <input type="text" id="metaDesc" class="form-control mb-2" placeholder="Ex: Treinar 5 vezes por semana">
+              <div class="row g-2 mb-2">
+                <div class="col-md-6"><input type="number" id="metaMin" class="form-control" value="300" min="30" step="10" placeholder="Minutos"></div>
+                <div class="col-md-6">
+                  <select id="metaPeriod" class="form-select">
+                    <option value="weekly">Por semana</option>
+                    <option value="monthly">Por mês</option>
+                  </select>
+                </div>
+              </div>
+              <div class="row g-2 mb-3">
+                <div class="col-md-6">
+                  <select id="metaPriority" class="form-select">
+                    <option value="Alta">Prioridade Alta</option>
+                    <option value="Média">Prioridade Média</option>
+                    <option value="Baixa">Prioridade Baixa</option>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                  <button onclick="limparMetasConcluidas()" class="btn btn-outline-light w-100">Limpar Concluídas</button>
+                </div>
+              </div>
+              <button onclick="adicionarMeta()" class="btn btn-emerald w-100">Adicionar Meta</button>
+            </div>
+            <div id="metasSummary" class="metas-summary-grid"></div>
+          </div>
+          <div id="metasList" class="mt-4"></div>
+        </div>
+      </div>
+
+      <!-- PERFIL -->
+      <div id="app-perfil" class="app-content">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h2 class="mb-0">Perfil</h2>
+          <button class="btn btn-sm btn-outline-secondary" onclick="toggleSection('perfil-content')"><i class="fas fa-chevron-down"></i></button>
+        </div>
+        <div id="perfil-content">
+          <div class="profile-layout">
+            <aside class="profile-summary-card">
+              <div class="text-center mb-4">
+                <img id="profilePhoto" src="https://via.placeholder.com/120?text=Sem+Foto" alt="Foto de perfil" class="profile-photo">
+                <div class="mt-3"><button class="btn btn-sm btn-outline-emerald" onclick="document.getElementById('photoInput').click()">Alterar Foto</button></div>
+                <input type="file" id="photoInput" style="display:none;" accept="image/*" onchange="atualizarFoto(event)">
+              </div>
+              <div class="profile-identity mb-3">
+                <h4 id="profileDisplayName" class="mb-1">Luiz Felipe</h4>
+                <p id="profileDisplayEmail" class="text-muted mb-2">luiz@email.com</p>
+                <span id="profileGoalBadge" class="profile-goal-badge">Objetivo não definido</span>
+              </div>
+              <div class="profile-completion mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <span class="small text-muted">Perfil completo</span>
+                  <strong id="profileCompletionValue">0%</strong>
+                </div>
+                <div class="progress profile-progress" role="progressbar" aria-label="Completação do perfil" aria-valuemin="0" aria-valuemax="100">
+                  <div id="profileCompletionBar" class="progress-bar bg-success" style="width:0%"></div>
+                </div>
+              </div>
+              <div class="profile-quick-grid">
+                <div class="quick-metric">
+                  <span>Treinos</span>
+                  <strong id="quickTotalTreinos">0</strong>
+                </div>
+                <div class="quick-metric">
+                  <span>Total</span>
+                  <strong id="quickTempoTotal">0 min</strong>
+                </div>
+                <div class="quick-metric">
+                  <span>Média</span>
+                  <strong id="quickTempoMedio">0 min</strong>
+                </div>
+                <div class="quick-metric">
+                  <span>Membro</span>
+                  <strong id="quickDiasMembro">0 dias</strong>
+                </div>
+              </div>
+            </aside>
+
+            <div class="profile-sections">
+              <!-- Info Básica -->
+              <div class="card p-4 mb-4 profile-panel">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <h5 class="mb-0">Dados Pessoais</h5>
+                  <span class="small text-muted">Mantenha suas informações atualizadas</span>
+                </div>
+                <div class="mb-3"><label>Nome Completo</label><input type="text" id="userName_input" class="form-control" placeholder="Seu nome"></div>
+                <div class="mb-3"><label>E-mail</label><input type="email" id="userEmail" class="form-control" placeholder="seu@email.com"></div>
+                <div class="row g-2 mb-3">
+                  <div class="col-md-6"><label>Idade</label><input type="number" id="userAge" class="form-control" min="1" max="120"></div>
+                  <div class="col-md-6"><label>Gênero</label><select id="userGender" class="form-select"><option value="">Selecione</option><option>Masculino</option><option>Feminino</option><option>Outro</option></select></div>
+                </div>
+                <div class="row g-2 mb-3">
+                  <div class="col-md-6"><label>Peso (kg)</label><input type="number" id="userWeight" class="form-control" step="0.1" min="0" onchange="calcularIMC()"></div>
+                  <div class="col-md-6"><label>Altura (cm)</label><input type="number" id="userHeight" class="form-control" step="1" min="0" onchange="calcularIMC()"></div>
+                </div>
+                <div class="mb-3 profile-imc-box">
+                  <p class="mb-0"><strong>IMC:</strong> <span id="imc_display">--</span> <small id="imc_status" class="text-muted"></small></p>
+                </div>
+                <div class="mb-3"><label>Objetivo Principal</label><select id="userGoal" class="form-select"><option value="">Selecione</option><option>Perder peso</option><option>Ganhar massa muscular</option><option>Melhorar condicionamento</option><option>Manutenção</option></select></div>
+                <button onclick="salvarPerfil()" class="btn btn-emerald w-100">Salvar Alterações</button>
+              </div>
+
+              <!-- Estatísticas -->
+              <div class="profile-panel mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <h5 class="mb-0">Resumo de Performance</h5>
+                </div>
+                <div id="profileStats" class="row g-3"></div>
+              </div>
+
+              <!-- Preferências -->
+              <div class="card p-4 mb-4 profile-panel">
+                <h5 class="mb-3">Preferências</h5>
+                <div class="mb-3"><label>Unidade de Medida</label><select id="userUnit" class="form-select"><option value="metric">Quilogramas (kg) e Centímetros (cm)</option><option value="imperial">Libras (lbs) e Polegadas (in)</option></select></div>
+                <div class="form-check mb-2"><input type="checkbox" id="notificationsEnabled" class="form-check-input"><label class="form-check-label" for="notificationsEnabled">Ativar notificações</label></div>
+              </div>
+
+              <!-- Alterar Senha -->
+              <div class="card p-4 mb-4 profile-panel">
+                <h5 class="mb-3">Segurança da Conta</h5>
+                <div class="mb-3"><label>Senha Atual</label><input type="password" id="currentPassword" class="form-control" placeholder="Digite sua senha atual"></div>
+                <div class="mb-3"><label>Nova Senha</label><input type="password" id="newPassword" class="form-control" placeholder="Digite a nova senha"></div>
+                <div class="mb-3"><label>Confirmar Senha</label><input type="password" id="confirmPassword" class="form-control" placeholder="Confirme a nova senha"></div>
+                <button onclick="alterarSenha()" class="btn btn-outline-info w-100">Alterar Senha</button>
+              </div>
+
+              <!-- Zona de Perigo -->
+              <div class="card p-4 profile-panel danger-panel">
+                <h5 class="mb-3 text-danger">Zona de Perigo</h5>
+                <p class="text-muted small">Essas ações são irreversíveis. Use com cuidado.</p>
+                <button onclick="confirmarExcluirConta()" class="btn btn-outline-danger w-100">Excluir Conta</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/core.js"></script>
+  <script src="js/mapa.js"></script>
+  <script src="js/biblioteca.js"></script>
+  <script src="js/novo.js"></script>
+  <script src="js/historico.js"></script>
+  <script src="js/metas.js"></script>
+  <script src="js/dashboard.js"></script>
+  <script src="js/perfil.js"></script>
+  <script src="js/init.js"></script>
+</body>
+</html>

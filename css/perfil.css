@@ -1,0 +1,125 @@
+﻿/* ===== PERFIL ===== */
+.profile-layout {
+  display: grid;
+  grid-template-columns: 320px minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+
+.profile-summary-card {
+  position: sticky;
+  top: 20px;
+  background: linear-gradient(170deg, #12251f, #0f1714);
+  border: 1px solid #1f3c32;
+  border-radius: 16px;
+  padding: 22px;
+}
+
+.profile-photo {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 3px solid #10b981;
+  object-fit: cover;
+}
+
+.profile-identity h4 {
+  font-weight: 700;
+}
+
+.profile-goal-badge {
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  border: 1px solid #2a4d40;
+  background: rgba(16, 185, 129, 0.14);
+  color: var(--brand-accent-strong);
+}
+
+.profile-progress {
+  height: 10px;
+  background: #12241f;
+  border: 1px solid #1f3c32;
+}
+
+.profile-quick-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.quick-metric {
+  background: rgba(0, 0, 0, 0.18);
+  border: 1px solid #233a31;
+  border-radius: 12px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.quick-metric span {
+  color: var(--text-muted-theme);
+  font-size: 0.8rem;
+}
+
+.quick-metric strong {
+  color: var(--text-primary);
+  font-size: 1rem;
+}
+
+.profile-panel {
+  border: 1px solid #24362f;
+  border-radius: 14px;
+  background: #161616;
+}
+
+.profile-imc-box {
+  background: #052e16;
+  padding: 12px;
+  border-radius: 8px;
+}
+
+.profile-stat-card {
+  background: #171717;
+  border: 1px solid #293b33;
+  border-radius: 12px;
+  padding: 14px;
+  height: 100%;
+}
+
+.profile-stat-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.profile-stat-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(16, 185, 129, 0.16);
+  color: var(--brand-accent);
+}
+
+.profile-stat-label {
+  color: var(--text-muted-theme);
+  font-size: 0.86rem;
+  margin: 0;
+}
+
+.profile-stat-value {
+  color: var(--text-primary);
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.danger-panel {
+  border-color: #5d2626;
+}
+

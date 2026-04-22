@@ -1,0 +1,153 @@
+﻿/* ===== MAPA MUSCULAR ===== */
+.muscle-view-switch {
+  display: inline-flex;
+  border: 1px solid #2e3f39;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #121212;
+}
+
+.muscle-view-btn {
+  border: 0;
+  background: transparent;
+  color: #c3d8ce;
+  padding: 8px 14px;
+  font-size: 0.86rem;
+}
+
+.muscle-view-btn.active {
+  background: rgba(16, 185, 129, 0.18);
+  color: #b6f7dd;
+}
+
+.muscle-chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.muscle-chip {
+  border: 1px solid #2f463d;
+  background: #131313;
+  color: #d8ebe2;
+  border-radius: 999px;
+  padding: 5px 10px;
+  font-size: 0.8rem;
+}
+
+.muscle-chip:hover {
+  border-color: #10b981;
+}
+
+.muscle-chip.active {
+  background: rgba(16, 185, 129, 0.2);
+  border-color: #10b981;
+  color: #bdf8df;
+}
+
+.muscle-map-layout {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) 260px;
+  gap: 14px;
+  align-items: start;
+}
+
+.muscle-panel.hidden {
+  display: none;
+}
+
+.muscle-map-frame {
+  background: linear-gradient(160deg, #121212, #0d1310);
+  border: 1px solid #2a3d35;
+  border-radius: 14px;
+  padding: 12px;
+}
+
+.muscle-map {
+  width: 100%;
+  max-width: 260px;
+  height: auto;
+  margin: 0 auto;
+  display: block;
+}
+
+.muscle-body-bg {
+  fill: #121f1a;
+  stroke: #264339;
+  stroke-width: 1.4;
+}
+
+.muscle-zone {
+  cursor: pointer;
+  fill: #26322d;
+  stroke: #4a6a5d;
+  stroke-width: 1.4;
+  opacity: 0.88;
+  transition: all 0.18s ease;
+}
+
+.muscle-zone:hover,
+.muscle-zone:focus {
+  opacity: 1;
+  stroke-width: 2.4;
+  stroke: #7bf0bf;
+}
+
+.muscle-zone.active-zone {
+  fill: #1f8f65;
+  stroke: #a6f6d8;
+  stroke-width: 2.6;
+  opacity: 1;
+}
+
+.muscle-zone.dimmed-zone {
+  opacity: 0.35;
+}
+
+.muscle-info-card {
+  background: linear-gradient(165deg, #15201c, #101412);
+  border: 1px solid #2b3f36;
+  border-radius: 14px;
+  padding: 14px;
+}
+
+.muscle-selected-name {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.muscle-selected-count {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--brand-accent);
+}
+
+@media (max-width: 992px) {
+  .muscle-map-layout {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .muscle-info-card {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 768px) {
+  .muscle-map-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .muscle-map {
+    max-width: 220px;
+  }
+
+  .muscle-view-switch {
+    width: 100%;
+  }
+
+  .muscle-view-btn {
+    flex: 1;
+    text-align: center;
+  }
+}

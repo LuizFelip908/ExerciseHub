@@ -1,0 +1,144 @@
+﻿/* ===== RESPONSIVIDADE ===== */
+@media (max-width: 768px) {
+  body.sidebar-open {
+    overflow: hidden;
+  }
+
+  .main-content {
+    margin-left: 0;
+    padding: 20px;
+  }
+
+  .toggle-btn {
+    display: block;
+    left: 20px;
+    border-radius: 8px;
+  }
+
+  .sidebar {
+    z-index: 99;
+    width: var(--sidebar-expanded-width);
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+    box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.45);
+  }
+
+  .sidebar.collapsed {
+    width: var(--sidebar-expanded-width);
+  }
+
+  .main-content.sidebar-collapsed {
+    margin-left: 0;
+  }
+
+  .card-auth {
+    padding: 20px;
+    width: 94%;
+  }
+
+  .landing-metrics {
+    grid-template-columns: 1fr;
+  }
+
+  #app-historico .row.g-2 > [class*="col-"],
+  #app-biblioteca .row.g-2 > [class*="col-"] {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+
+  .historico-summary-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .novo-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .novo-preview-card {
+    position: static;
+  }
+
+  .historico-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .historico-selection-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .historico-selection-actions {
+    width: 100%;
+  }
+
+  .historico-selection-actions .btn {
+    flex: 1 1 100%;
+  }
+
+  .historico-actions {
+    width: 100%;
+  }
+
+  .historico-actions .btn {
+    width: 100%;
+  }
+
+  .profile-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-summary-card {
+    position: static;
+  }
+
+  .metas-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .metas-summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-kpi-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .dashboard-chart-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 576px) {
+  .landing h1 {
+    font-size: 1.5rem;
+  }
+
+  .landing-actions {
+    flex-direction: column;
+  }
+
+  .landing-actions .btn {
+    width: 100%;
+  }
+
+  .main-content {
+    padding: 15px;
+  }
+
+  .exercise-card {
+    padding: 12px;
+  }
+
+  .historico-summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-kpi-grid {
+    grid-template-columns: 1fr;
+  }
+}

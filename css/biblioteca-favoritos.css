@@ -1,0 +1,134 @@
+﻿/* ===== EXERCISE CARDS ===== */
+.exercise-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.exercise-card:hover {
+  border-color: var(--brand-accent);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(16, 185, 129, 0.2);
+}
+
+.theme-toggle-btn {
+  color: var(--text-primary);
+  background: var(--bg-surface-soft);
+  border: 1px solid var(--border-color);
+  text-align: left;
+}
+
+.theme-toggle-btn:hover {
+  border-color: var(--brand-accent);
+  color: var(--brand-accent);
+}
+
+.card,
+.profile-panel,
+.profile-stat-card,
+.metas-form-card,
+.metas-summary-card,
+.meta-card,
+.historico-item,
+.historico-kpi,
+.novo-form-card,
+.novo-preview-card,
+.novo-preview-item,
+.muscle-map-frame,
+.muscle-info-card,
+.profile-summary-card {
+  background: var(--bg-surface-soft) !important;
+  border-color: var(--border-color) !important;
+  color: var(--text-primary);
+}
+
+.form-control,
+.form-select,
+textarea {
+  background: var(--bg-input);
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
+
+.form-control::placeholder,
+textarea::placeholder {
+  color: var(--text-muted-theme);
+}
+
+.form-select option {
+  color: var(--text-primary);
+  background: var(--bg-input);
+}
+
+.btn-outline-light {
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
+
+.btn-outline-light:hover {
+  color: #fff;
+  background: var(--brand-accent);
+  border-color: var(--brand-accent);
+}
+
+.text-muted {
+  color: var(--text-muted-theme) !important;
+}
+
+:root[data-theme="light"] .landing .text-light {
+  color: var(--text-secondary) !important;
+}
+
+:root[data-theme="light"] .text-light {
+  color: var(--text-primary) !important;
+}
+
+.exercise-card img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  object-fit: contain;
+  max-height: 320px;
+}
+
+.exercise-modal-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  max-height: 70vh;
+  object-fit: contain;
+}
+
+/* ===== BADGES DE DIFICULDADE ===== */
+.badge-easy {
+  background: #28a745;
+}
+
+.badge-medium {
+  background: #ffc107;
+  color: #000;
+}
+
+.badge-hard {
+  background: #dc3545;
+}
+
+/* ===== TAGS DE EXERCÃCIO ===== */
+.exercise-tags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+/* ===== FAVORITOS ===== */
+.favorite {
+  color: #ffc107;
+}
+
